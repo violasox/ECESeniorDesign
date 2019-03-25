@@ -4,9 +4,10 @@ from picamera.array import PiRGBArray
 import cv2 as cv
 import numpy as np
 import time
+import serial
 
 displayImage = False
-
+ser = serial.Serial('/dev/ttyUSB0') 
 camera = picamera.PiCamera()
 #camera.resolution(640, 480)
 camera.resolution = (640, 480)
@@ -39,7 +40,10 @@ while True:
             xTranslation = trans[0][2]
             yTranslation = trans[0][0]
             wallRotation = rot[0][2]
-
+            
+            sendStr = '{}, {}, {}'.format(xTranslation, yTranslation, rotation)
+            ser.write(b'hello')
+            
     if displayImage:
         cv.imshow('frame', frame)
 
