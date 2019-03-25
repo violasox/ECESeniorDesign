@@ -41,8 +41,8 @@ while True:
             yTranslation = trans[0][0]
             wallRotation = rot[0][2]
             
-            sendStr = '{}, {}, {}'.format(xTranslation, yTranslation, rotation)
-            ser.write(b'hello')
+            sendStr = '{},{},{},{}'.format(xTranslation, yTranslation, rotation, '\n')
+            ser.write(sendStr)
             
     if displayImage:
         cv.imshow('frame', frame)
