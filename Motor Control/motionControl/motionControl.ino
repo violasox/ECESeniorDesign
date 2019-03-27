@@ -51,15 +51,19 @@ void move(int speed1, int speed2, int speed3){
 //}
 char str[100] = {0};
 char* xTranslation;
-int x_axis;
+float x_axis;
 char* yTranslation;
-int y_axis;
+float y_axis;
 char* rot;
-int roation;
+float rotation;
 char inData[100];
+int stage1 = 1;
+int stage2 = 0;
+int stage3 = 0;
 
 void loop() {
   int count =0;
+  
         while (Serial.available() > 0)
         {
           char recieved = Serial.read();
@@ -70,49 +74,55 @@ void loop() {
           {
               Serial.print("Arduino Received: ");
               Serial.print(inData);
-              
-//       xTranslation = strtok(str,",");
-//       x_axis = atoi(xTranslation);
-//       yTranslation = strtok(NULL,",");
-//       y_axis = atoi(yTranslation);
-//       rot = strtok(NULL,",");
-//       rotation = atoi(rot);
-//       Serial.println(x_axis);
-//       Serial.println(y_axis);
-//       Serial.println(rotation);
+
+              xTranslation = strtok(inData,",");
+              x_axis = atof(xTranslation);
+              yTranslation = strtok(NULL,",");
+              y_axis = atof(yTranslation);
+              rot = strtok(NULL,",");
+              rotation = atof(rot);
+              Serial.println(x_axis);
+              Serial.println(y_axis);
+              Serial.println(rotation);
            }
            count++;
         }
        
-     
-     time = millis();  
-     while((millis()-time)<0.01){
-      //move(1375,1600,1600); //move in parallel
-      move(1400,1590,1590);    
-    }
-    delay(1000);
-//     
-//    time = millis();
-//    while((millis()-time)<2000){
-//      move(neutral,1400,1600); //go forward
-//    }
-//    time = millis();
-//    while((millis()-time)<2000){
-//      move(neutral,1200,1800); //go forward
-//    }
-//     time=millis();
-//    while((millis()-time)<2000){ 
-//      move(1800,1800,1800); //turn around
-//    }
-    
-//     time=millis();
-//    while((millis()-time)<2000){ 
-//      move(1200,1200,1800); //move parallel
-//    }
-//    time=millis();
-//    while((millis()-time)<2000){ 
-//    move(neutral,1800,1200); //go backward
-//    }
-    delay(2);
+     //stage 1
+     if(stage1 == 1){
+      //rotate clockwise if positive
+      //counterclockwise if negative
+        if(rotation > 0.3){
+          move(1600,1600,1600); //turn around
+        }
+        else if(rotation<-0.3){
+          move(1400,1400,1400);
+        }
+        else{
+          stage1 = 0;
+          stage2 = 1;
+        }
+     }
+
+     if(stage2 == 1){
+      //move right if positive
+      //move left if negative
+        if(y_axis>=3){
+          move(1375, 1600, 1600);//move in parallel
+        }
+        else if( y_axis <= -3){
+          move(1625,1400,1400)';
+        }
+        else{
+          stage2 = 0;
+          stage3 = 1;
+        }
+     }
+
+     if(stage3 == 1){
+        if(x_axis!=1){
+          move(neutral,1400,1600);
+        }
+     }
     
 }
