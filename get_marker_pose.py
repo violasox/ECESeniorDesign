@@ -7,8 +7,8 @@ import time
 import serial
 import sys
 
-displayImage = True
 ser = serial.Serial('/dev/ttyACM0') 
+displayImage = False
 camera = picamera.PiCamera()
 #camera.resolution(640, 480)
 camera.resolution = (640, 480)
@@ -24,7 +24,7 @@ distMatrix = calibFile.getNode('dist_coeff').mat()
 calibFile.release()
 arucoDict = aruco.Dictionary_get(aruco.DICT_4X4_250)
 params = aruco.DetectorParameters_create()
-print('initialized')
+print('initialized camera')
 
 while True:
     # beginCaptureTime = time.time()
@@ -50,8 +50,8 @@ while True:
             sendStr = sendStr.encode('utf-8')
             ser.write(sendStr)
             
-    #if displayImage:
-        #cv.imshow('frame', frame)
+    if displayImage:
+        cv.imshow('frame', frame)
 
     rawCapture.truncate(0)
     # elapsedCaptureTime = time.time() - beginCaptureTime
