@@ -44,8 +44,8 @@ while True:
             yTranslation = trans[0][0]
             yTranslation = yTranslation*1000
             wallRotation = rot[0][2]
-            wallRoation = wallRotation*1000
-            
+            wallRotation = wallRotation*1000
+           # print('x_axis: {}. y_axis: {}. Rotation: {}'.format(xTranslation, yTranslation, wallRotation), end='\r')
             sendStr = '{},{},{},{}'.format(xTranslation, yTranslation, wallRotation,"\n")
             sendStr = sendStr.encode('utf-8')
             ser.write(sendStr)
