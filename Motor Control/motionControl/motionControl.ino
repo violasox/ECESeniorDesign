@@ -74,18 +74,30 @@ void loop() {
           // Process message when new line character is recieved
           if (recieved == '\n')
           {
-              Serial.print("Arduino Received: ");
-              Serial.print(inData);
+              Serial.println("Arduino Received: ");
+              //Serial.println(inData);
 
-              xTranslation = strtok(inData,",");
-              x_axis = atof(xTranslation);
-              yTranslation = strtok(NULL,",");
-              y_axis = atof(yTranslation);
+              xTranslation = strtok(inData,",");  
+              yTranslation = strtok(NULL,",");          
               rot = strtok(NULL,",");
+              
+              if(atof(yTranslation)==0 && atof(rot)==0){
+                Serial.println("bad data, ignore---");
+                break;
+              }
+          
+              x_axis = atof(xTranslation);
+              y_axis = atof(yTranslation);
               rotation = atof(rot);
+              Serial.print("x_axis: ");
               Serial.println(x_axis);
+
+              Serial.print("y_axis: ");
               Serial.println(y_axis);
+
+              Serial.print("rotation: ");
               Serial.println(rotation);
+              Serial.println();
            }
            count++;
         }
@@ -109,7 +121,9 @@ void loop() {
           stage0 = 0;
           stage1 = 1;
           start = millis();
+          Serial.println("exit stage 0 -------------------");
         }
+        
      }
      
      //stage 1
@@ -117,7 +131,7 @@ void loop() {
       //rotate clockwise if positive
       //counterclockwise if negative
         
-        if(rotation > 80){
+        if(rotation > 100){
           if(millis()-start < 10){
              move(1400,1400,1400); 
           }else{
@@ -125,7 +139,7 @@ void loop() {
             start = millis();
           }
         }
-        else if(rotation<-80){
+        else if(rotation<-100){
           if(millis()-start < 10){
             move(1600,1600,1600); //turn around
           }
@@ -139,67 +153,72 @@ void loop() {
           stage1 = 0;
           stage2 = 1;
           start = millis();
-        }
-     }
-
-
-      if(stage2 == 1){
-      //move right if positive
-      //move left if negative
-        if(y_axis >= 400){
-            move(1375, 1600, 1600);//move in parallel
-        }
-        else if( y_axis <= -400){
-          move(1625,1400,1400); 
-        }
-        else{
-          stage2 = 0;
-          stage3 = 1;
-          start = millis();
-        }
-     }
-
-     if(stage3 == 1){
-      //move right if positive
-      //move left if negative
-        if(y_axis >= 80){
-          if(millis()-start < 200){
-            move(1375, 1600, 1600);//move in parallel
-          }
-          else{
-            delay(1000);
-            start = millis();
-          }
-        }
-        else if( y_axis <= -80){
-          if(millis()-start < 200){
-            move(1625,1400,1400);  
-          }else{
-            delay(1000);
-            start = millis();
-          }
-          
-        }
-        else{
-          stage3 = 0;
-          stage4 = 1;
-          start = millis();
-        }
-     }
-
-     if(stage4 == 1){
-        if(x_axis > 400){
-          move(neutral,1600,1400);
-        }
-        else{
-          stage1 = 1;
-          stage4 = 0;
-          x_axis = 0;
-          y_axis = 0;
-          rotation = 0;
-          start = millis();
+          Serial.println("exit stage1-------------------");
         }
         
      }
+
+
+//      if(stage2 == 1){
+//      //move right if positive
+//      //move left if negative
+//        if(y_axis >= 400){
+//            move(1375, 1600, 1600);//move in parallel
+//        }
+//        else if( y_axis <= -400){
+//          move(1625,1400,1400); 
+//        }
+//        else{
+//          stage2 = 0;
+//          stage3 = 1;
+//          start = millis();
+//          Serial.println("exit stage 2--------------------");
+//        }
+//     }
+//
+//     if(stage3 == 1){
+//      //move right if positive
+//      //move left if negative
+//        if(y_axis >= 80){
+//          if(millis()-start < 200){
+//            move(1375, 1600, 1600);//move in parallel
+//          }
+//          else{
+//            delay(1000);
+//            start = millis();
+//          }
+//        }
+//        else if( y_axis <= -80){
+//          if(millis()-start < 200){
+//            move(1625,1400,1400);  
+//          }else{
+//            delay(1000);
+//            start = millis();
+//          }
+//          
+//        }
+//        else{
+//          stage3 = 0;
+//          stage4 = 1;
+//          start = millis();
+//          Serial.println("exit stage 3---------------------");
+//        }
+//     }
+//
+//     if(stage4 == 1){
+//        if(x_axis > 400){
+//          move(neutral,1600,1400);
+//        }
+//        else{
+//          stage1 = 1;
+//          stage4 = 0;
+//          x_axis = 0;
+//          y_axis = 0;
+//          rotation = 0;
+//          start = millis();
+//          Serial.println("exit stage 4------------------");
+//        }
+//        
+//     }
     
 }
