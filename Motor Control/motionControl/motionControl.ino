@@ -51,16 +51,18 @@ void move(int speed1, int speed2, int speed3){
 //}
 char str[100] = {0};
 char* xTranslation;
-float x_axis;
+float x_axis=1000;
 char* yTranslation;
-float y_axis;
+float y_axis=1000;
 char* rot;
-float rotation;
+float rotation=10000;
 char inData[100];
-int stage1 = 1;
+int stage0 = 1;
+int stage1 = 0;
 int stage2 = 0;
 int stage3 = 0;
-
+int stage4 = 0;
+unsigned long start = 0;
 void loop() {
   int count =0;
   
@@ -87,42 +89,117 @@ void loop() {
            }
            count++;
         }
-       
+
+
+
+     //stage 1
+     if(stage0 == 1){
+      //rotate clockwise if positive
+      //counterclockwise if negative
+        
+        if(rotation == 10000 ){
+          if(millis()-start < 2000){
+             move(1400,1400,1400); 
+          }else{
+            delay(1500);
+            start = millis();
+          }
+        }
+        else{
+          stage0 = 0;
+          stage1 = 1;
+          start = millis();
+        }
+     }
+     
      //stage 1
      if(stage1 == 1){
       //rotate clockwise if positive
       //counterclockwise if negative
-        if(rotation > 0.3){
-          move(1600,1600,1600); //turn around
+        
+        if(rotation > 80){
+          if(millis()-start < 10){
+             move(1400,1400,1400); 
+          }else{
+            delay(1500);
+            start = millis();
+          }
         }
-        else if(rotation<-0.3){
-          move(1400,1400,1400);
+        else if(rotation<-80){
+          if(millis()-start < 10){
+            move(1600,1600,1600); //turn around
+          }
+          else{
+            delay(1000);
+            start = millis();
+          }
+       
         }
         else{
           stage1 = 0;
           stage2 = 1;
+          start = millis();
         }
      }
 
-     if(stage2 == 1){
+
+      if(stage2 == 1){
       //move right if positive
       //move left if negative
-        if(y_axis>=3){
-          move(1375, 1600, 1600);//move in parallel
+        if(y_axis >= 400){
+            move(1375, 1600, 1600);//move in parallel
         }
-        else if( y_axis <= -3){
-          move(1625,1400,1400)';
+        else if( y_axis <= -400){
+          move(1625,1400,1400); 
         }
         else{
           stage2 = 0;
           stage3 = 1;
+          start = millis();
         }
      }
 
      if(stage3 == 1){
-        if(x_axis!=1){
-          move(neutral,1400,1600);
+      //move right if positive
+      //move left if negative
+        if(y_axis >= 80){
+          if(millis()-start < 200){
+            move(1375, 1600, 1600);//move in parallel
+          }
+          else{
+            delay(1000);
+            start = millis();
+          }
         }
+        else if( y_axis <= -80){
+          if(millis()-start < 200){
+            move(1625,1400,1400);  
+          }else{
+            delay(1000);
+            start = millis();
+          }
+          
+        }
+        else{
+          stage3 = 0;
+          stage4 = 1;
+          start = millis();
+        }
+     }
+
+     if(stage4 == 1){
+        if(x_axis > 400){
+          move(neutral,1600,1400);
+        }
+        else{
+          stage1 = 1;
+          stage4 = 0;
+          x_axis = 0;
+          y_axis = 0;
+          rotation = 0;
+          start = millis();
+        }
+        
      }
     
 }
