@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-int frontPin = 22;
-int backLeftPin= 21;
+int frontPin = 21;
+int backLeftPin= 22;
 int backRightPin= 20;
 int pwmFreq = 50;
 int backward = 1200;
@@ -49,17 +49,17 @@ void move(int speed1, int speed2, int speed3){
 //void parrallel_move(int speed, int speed2, int speed3){
 //  front(
 //}
-
+char str[100] = {0};
 char* xTranslation;
 float x_axis=1000;
 char* yTranslation;
 float y_axis=1000;
 char* rot;
-float rotation=10000;
+float rotation=-10000;
 char inData[100];
-int stage0 = 1;
+int stage0 = 0;
 int stage1 = 0;
-int stage2 = 0;
+int stage2 = 1;
 int stage3 = 0;
 int stage4 = 0;
 unsigned long start = 0;
@@ -74,84 +74,47 @@ void loop() {
           // Process message when new line character is recieved
           if (recieved == '\n')
           {
-              Serial.println("Arduino Received: ");
-              //Serial.println(inData);
+              Serial.print("Arduino Received: ");
+              Serial.print(inData);
 
-              xTranslation = strtok(inData,",");  
-              yTranslation = strtok(NULL,",");          
-              rot = strtok(NULL,",");
-              
-              if(atof(yTranslation)==0 && atof(rot)==0){
-                Serial.println("bad data, ignore---");
-                break;
-              }
-          
+              xTranslation = strtok(inData,",");
               x_axis = atof(xTranslation);
+              yTranslation = strtok(NULL,",");
               y_axis = atof(yTranslation);
+              rot = strtok(NULL,",");
               rotation = atof(rot);
-              Serial.print("x_axis: ");
               Serial.println(x_axis);
-
-              Serial.print("y_axis: ");
               Serial.println(y_axis);
-
-              Serial.print("rotation: ");
               Serial.println(rotation);
-              Serial.println();
            }
            count++;
         }
 
-
-
      //stage 1
-     if(stage0 == 1){
-      //rotate clockwise if positive
-      //counterclockwise if negative
-        
-        if(rotation == 10000 ){ 
-             move(1700,1700,1700);           
-        }
-        else{
-          stage0 = 0;
-          stage1 = 1;
-          start = millis();
-          Serial.println("exit stage 0 -------------------");
-        }
-        
-     }
+//     if(stage1 == 1){
+//      //rotate clockwise if positive
+//      //counterclockwise if negative
+//        
+//        if(rotation > 100){
+//           move(1400,1400,1400); 
+//        }
+//        else if(rotation<-00){
+//            move(1600,1600,1600); //turn around
+//        }
+//        else{
+//          stage1 = 0;
+//          stage2 = 1;
+//        }
+//     }
      
-     //stage 1
-     if(stage1 == 1){
-      //rotate clockwise if positive
-      //counterclockwise if negative
-        
-        if(rotation > 500){
-          start = millis(); 
-          move(1400,1400,1400); 
-         // Serial.println("runningnnnnnnnnnnn");       
-        }
-        else if(rotation<-500){
-          move(1600,1600,1600); 
-          //Serial.println("runningnnnnnnnnnnn"); 
-        }
-        else{
-          stage1 = 0;
-          stage2 = 1;
-          Serial.println("finish---");
-         }
-        
-     }
-
-
       if(stage2 == 1){
       //move right if positive
       //move left if negative
-        if(y_axis >= 50){
-            move(1375, 1600, 1600);//move in parallel
+        if(y_axis >10){
+            move(1360, 1600, 1600);//move right ok!
         }
-        else if( y_axis <= -50){
-          move(1625,1400,1400); 
+        else if( y_axis <= -10){
+          move(1620,1400,1400);  //move left
         }
         else{
           stage2 = 0;
@@ -159,20 +122,8 @@ void loop() {
         }
      }
 
-
-     if(stage4 == 1){
-        if(x_axis > 400){
-          move(neutral,1600,1400);
-        }
-        else{
-          stage1 = 1;
-          stage4 = 0;
-          x_axis = 0;
-          y_axis = 0;
-          rotation = 0;
-          Serial.println("exit stage 4------------------");
-        }
-        
+     if(stage3 == 1){
+        move(neutral,1393,1600);
      }
     
 }
