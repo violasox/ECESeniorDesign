@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-int frontPin = 21;
-int backLeftPin= 22;
+int frontPin = 22;
+int backLeftPin= 21;
 int backRightPin= 20;
 int pwmFreq = 50;
 int backward = 1200;
@@ -61,7 +61,10 @@ int stage0 = 0;
 int stage1 = 0;
 int stage2 = 1;
 int stage3 = 0;
-int stage4 = 0;
+int stage4 = 1;
+int stage5 = 0;
+int stage6 = 1;
+int stage7 = 0;
 unsigned long start = 0;
 void loop() {
   int count =0;
@@ -89,7 +92,6 @@ void loop() {
            }
            count++;
         }
-
      //stage 1
 //     if(stage1 == 1){
 //      //rotate clockwise if positive
@@ -106,15 +108,15 @@ void loop() {
 //          stage2 = 1;
 //        }
 //     }
-     
+  if(x_axis > 1000){
       if(stage2 == 1){
       //move right if positive
       //move left if negative
         if(y_axis >10){
-            move(1360, 1600, 1600);//move right ok!
+          move(1357, 1600, 1600);//move right ok!
         }
         else if( y_axis <= -10){
-          move(1620,1400,1400);  //move left
+          move(1627,1400,1400);  //move left
         }
         else{
           stage2 = 0;
@@ -123,7 +125,43 @@ void loop() {
      }
 
      if(stage3 == 1){
-        move(neutral,1393,1600);
+        move(neutral,1600,1393);
      }
-    
+  }
+  else if(x_axis<=1000 && x_axis > 500){
+     if(stage4 == 1){
+          if(y_axis >10){
+            move(1357, 1600, 1600);//move right ok!
+          }
+          else if( y_axis <= -10){
+            move(1627,1400,1400);  //move left
+          }
+          else{
+            stage4=0;
+            stage5=1;
+          }
+     }
+     
+     if(stage5 == 1){
+        move(neutral,1600,1393);
+     }
+  }
+  else{
+    if(stage6 == 1){
+          if(y_axis >10){
+            move(1357, 1600, 1600);//move right ok!
+          }
+          else if( y_axis <= -10){
+            move(1627,1400,1400);  //move left
+          }
+          else{
+            stage6=0;
+            stage7=1;
+          }
+     }
+     
+     if(stage7 == 1){
+        move(neutral,1600,1393);
+     }
+  }
 }
