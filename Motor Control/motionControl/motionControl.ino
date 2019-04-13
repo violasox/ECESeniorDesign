@@ -92,6 +92,8 @@ void loop() {
            }
            count++;
         }
+
+//        move(neutral,1600,1392);
      //stage 1
 //     if(stage1 == 1){
 //      //rotate clockwise if positive
@@ -107,15 +109,15 @@ void loop() {
 //          stage1 = 0;
 //          stage2 = 1;
 //        }
-//     }
+////     }
   if(x_axis > 1000){
       if(stage2 == 1){
       //move right if positive
       //move left if negative
-        if(y_axis >10){
+        if(y_axis >30){
           move(1357, 1600, 1600);//move right ok!
         }
-        else if( y_axis <= -10){
+        else if( y_axis <= -30){
           move(1627,1400,1400);  //move left
         }
         else{
@@ -125,7 +127,7 @@ void loop() {
      }
 
      if(stage3 == 1){
-        move(neutral,1600,1393);
+        move(neutral,1600,1392);
      }
   }
   else if(x_axis<=1000 && x_axis > 500){
@@ -143,15 +145,15 @@ void loop() {
      }
      
      if(stage5 == 1){
-        move(neutral,1600,1393);
+        move(neutral,1600,1392);
      }
   }
   else{
     if(stage6 == 1){
-          if(y_axis >10){
+          if(y_axis > -20){
             move(1357, 1600, 1600);//move right ok!
           }
-          else if( y_axis <= -10){
+          else if( y_axis < -50){
             move(1627,1400,1400);  //move left
           }
           else{
@@ -161,7 +163,7 @@ void loop() {
      }
      
      if(stage7 == 1){
-        move(neutral,1600,1393);
+        move(neutral,1600,1392);
      }
   }
 }
